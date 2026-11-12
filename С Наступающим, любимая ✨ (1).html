@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>С Наступающим, любимая ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#e8c47c;--gs:rgba(232,196,124,.5);--ink:#f4ead8;--dim:#d9c9b0;
+--glass:rgba(20,16,40,.55);--line:rgba(232,196,124,.4)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Cormorant Garamond',Georgia,serif;color:var(--ink);
+background:linear-gradient(160deg,#0d1230 0%,#1a1440 45%,#3a1030 100%);
+min-height:100vh;overflow-x:hidden;position:relative}
+h1,h2,h3,.hand{font-family:'Marck Script','Segoe Script',cursive;font-weight:400}
+
+/* шёлковый фон: медленно дрейфующие пятна света */
+#silk{position:fixed;inset:-12%;z-index:0;pointer-events:none;filter:blur(60px);opacity:.55}
+.blob{position:absolute;width:46vmax;height:46vmax;border-radius:50%;mix-blend-mode:screen}
+.blob.b1{background:radial-gradient(circle,rgba(120,30,60,.55),transparent 65%);left:-8%;top:-10%;animation:drift1 26s ease-in-out infinite alternate}
+.blob.b2{background:radial-gradient(circle,rgba(232,196,124,.26),transparent 65%);right:-10%;top:28%;animation:drift2 31s ease-in-out infinite alternate}
+.blob.b3{background:radial-gradient(circle,rgba(70,20,90,.5),transparent 65%);left:18%;bottom:-18%;animation:drift3 22s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(9vw,7vh) scale(1.15)}}
+@keyframes drift2{to{transform:translate(-8vw,-6vh) scale(1.12)}}
+@keyframes drift3{to{transform:translate(7vw,-9vh) scale(1.18)}}
+#grain{position:fixed;inset:0;z-index:44;pointer-events:none;opacity:.05;mix-blend-mode:overlay}
+
+/* фон: падающие фото + виньетка */
+#photoBg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+background:radial-gradient(ellipse at 50% 45%,transparent 42%,rgba(5,4,14,.55) 100%)}
+.fallWrap{position:absolute;top:-300px;animation:fall linear infinite;will-change:transform}
+@keyframes fall{to{transform:translateY(calc(100vh + 360px))}}
+.polaroid{padding:7px 7px 24px;background:rgba(255,252,245,.94);border-radius:4px;
+box-shadow:0 0 22px rgba(232,196,124,.18),0 8px 26px rgba(0,0,0,.35);
+animation:sway 7s ease-in-out infinite alternate;
+opacity:0;filter:saturate(.92);transition:opacity 1.2s ease}
+.polaroid.lit{opacity:.38;filter:blur(.4px) saturate(.92)}
+.polaroid img{width:100%;aspect-ratio:1/1.15;object-fit:cover;border-radius:2px;background:#cdd6ea;display:block}
+.polaroid figcaption{font-size:10px;text-align:center;color:#5a4a3a;padding-top:5px;font-style:italic}
+.polaroid .fb{width:100%;aspect-ratio:1/1.15;border-radius:2px;display:flex;flex-direction:column;
+align-items:center;justify-content:center;gap:4px;font-size:20px;
+background:linear-gradient(135deg,#f6cfd8,#bcd4ee);color:#8a6a86}
+.polaroid .fb small{font-size:9px;opacity:.75}
+@keyframes sway{from{transform:rotate(-4deg) translateX(-8px)}to{transform:rotate(4deg) translateX(8px)}}
+@media(min-width:760px){.polaroid{width:132px}}
+@media(max-width:759px){.polaroid{width:92px}.polaroid.lit{opacity:.32;filter:blur(.3px) saturate(.92)}}
+
+/* снег и гирлянда */
+#snow{position:fixed;inset:0;z-index:2;pointer-events:none}
+#snow i{position:absolute;top:-4vh;border-radius:50%;background:#fff;opacity:.7;animation:drop linear infinite}
+@keyframes drop{to{transform:translateY(108vh)}}
+.garland{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-around;pointer-events:none}
+.garland span{width:7px;height:7px;border-radius:50%;margin-top:14px;background:var(--gold);
+box-shadow:0 0 8px var(--gs);animation:tw 2.4s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+canvas#fx{position:fixed;inset:0;z-index:45;pointer-events:none}
+
+/* экран-подарок с коробкой */
+#gate{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;
+justify-content:center;gap:24px;text-align:center;padding:20px;
+background:radial-gradient(120% 120% at 50% 20%,rgba(58,16,48,.92),rgba(13,18,48,.97));
+backdrop-filter:blur(6px);transition:opacity 1s,visibility 1s}
+#gate.open{opacity:0;visibility:hidden}
+#gate h1{font-size:clamp(34px,7vw,56px);text-shadow:0 2px 22px rgba(232,196,124,.35)}
+#gate p{color:var(--dim);font-style:italic;font-size:19px;max-width:320px}
+#gate .hint{font-size:14px;opacity:.55}
+.giftbox{position:relative;width:110px;height:100px;margin:0 auto;animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+.gb-body{position:absolute;left:8px;right:8px;bottom:0;height:62px;border-radius:10px;
+background:linear-gradient(160deg,#8a3550,#5e1f38);
+box-shadow:0 12px 30px rgba(0,0,0,.5),inset 0 2px 6px rgba(255,255,255,.15)}
+.gb-body::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:14px;transform:translateX(-50%);
+background:linear-gradient(180deg,#e8c47c,#c79b4f);opacity:.9;border-radius:3px}
+.gb-lid{position:absolute;left:0;right:0;top:20px;height:30px;border-radius:8px;z-index:2;
+background:linear-gradient(160deg,#a24460,#6d2742);box-shadow:0 6px 16px rgba(0,0,0,.4);
+transition:transform 1s cubic-bezier(.2,.8,.3,1),opacity 1s}
+.gb-lid::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:14px;transform:translateX(-50%);
+background:linear-gradient(180deg,#f0d49a,#d3a95f);border-radius:3px}
+.gb-bow{position:absolute;left:50%;top:-18px;transform:translateX(-50%);font-size:26px}
+.gb-beam{position:absolute;left:50%;bottom:58px;width:12px;height:0;transform:translateX(-50%);
+background:linear-gradient(180deg,rgba(255,236,180,.95),rgba(255,236,180,0));
+border-radius:50% 50% 0 0;filter:blur(4px);opacity:0;transition:all 1s ease .25s;z-index:1}
+#giftbox.open{animation:none}
+#giftbox.open .gb-lid{transform:translateY(-70px) rotate(-16deg);opacity:0}
+#giftbox.open .gb-beam{height:200px;width:74px;opacity:1}
+#openGiftBtn{font-family:'Marck Script',cursive;font-size:25px;color:var(--gold);letter-spacing:.03em;
+background:rgba(20,16,40,.5);border:1px solid var(--line);border-radius:60px;
+padding:18px 46px;cursor:pointer;position:relative;overflow:hidden;
+box-shadow:0 0 30px rgba(232,196,124,.25),inset 0 0 18px rgba(232,196,124,.08);
+transition:box-shadow .4s,transform .2s}
+#openGiftBtn:hover{box-shadow:0 0 46px rgba(232,196,124,.45);transform:translateY(-2px)}
+#openGiftBtn::after{content:'';position:absolute;top:0;bottom:0;width:34px;left:-60px;
+background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);
+animation:shine 3.6s ease-in-out infinite}
+@keyframes shine{0%,55%{left:-60px}80%,100%{left:calc(100% + 30px)}}
+
+/* контент */
+#content{position:relative;z-index:3;display:none}
+#content.shown{display:block}
+section{max-width:680px;margin:0 auto;padding:70px 22px;text-align:center}
+.header{padding-top:110px}
+.orn{display:flex;align-items:center;justify-content:center;gap:14px;color:var(--gold);margin:18px 0;font-size:18px}
+.orn i{display:block;height:1px;width:90px;background:linear-gradient(90deg,transparent,var(--gs))}
+.orn i:last-child{background:linear-gradient(270deg,transparent,var(--gs))}
+h2{font-size:clamp(30px,6vw,44px);margin-bottom:10px}
+.shimmer{background:linear-gradient(100deg,#e8c47c 20%,#fff2d0 40%,#e8c47c 60%);
+background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;
+animation:shim 4s linear infinite}
+@keyframes shim{to{background-position:200% center}}
+.sub{color:var(--dim);font-style:italic;font-size:18px}
+
+.timer{margin-top:30px}
+.cells{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.cell{background:var(--glass);border:1px solid var(--line);border-radius:12px;
+min-width:74px;padding:14px 8px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.cell b{display:block;font-size:30px;color:var(--gold);font-variant-numeric:tabular-nums}
+.cell span{font-size:13px;color:var(--dim);letter-spacing:.08em}
+.cell.sec b{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+#timerNote{margin-top:14px;color:var(--dim);font-style:italic;font-size:16px}
+
+/* карточки со свечным светом и бумагой */
+.letter{text-align:left;background:var(--glass);border:1px solid var(--line);border-radius:16px;
+padding:30px 26px;margin-top:34px;line-height:1.75;font-size:19px;
+box-shadow:0 14px 40px rgba(0,0,0,.35);min-height:120px;position:relative;
+background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.012) 0 2px,transparent 2px 4px)}
+.letter::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+box-shadow:inset 0 1px 0 rgba(255,240,210,.25),inset 0 16px 36px -20px rgba(232,196,124,.3)}
+.letter .sign{margin-top:16px;text-align:right;font-family:'Marck Script',cursive;font-size:24px;color:var(--gold)}
+.ph{color:var(--gold);border-bottom:1px dashed var(--gs)}
+.caret{display:inline-block;width:2px;height:1.1em;background:var(--gold);vertical-align:-2px;
+animation:blink 1s steps(1) infinite;margin-left:2px}
+@keyframes blink{50%{opacity:0}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-top:34px}
+.qcard{background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:22px 14px;position:relative;
+transition:transform .35s,box-shadow .35s}
+.qcard::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+box-shadow:inset 0 1px 0 rgba(255,240,210,.2),inset 0 14px 30px -20px rgba(232,196,124,.25)}
+.qcard:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(232,196,124,.15)}
+.qcard .ic{font-size:30px}
+.qcard h3{color:var(--gold);font-size:24px;margin:10px 0 6px}
+.qcard p{font-size:15.5px;color:var(--dim)}
+
+/* таймлайн «наша история» */
+.tl{position:relative;max-width:420px;margin:30px auto 0;padding-left:28px;text-align:left}
+.tl::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:1px;
+background:linear-gradient(180deg,transparent,var(--gs),transparent)}
+.tlItem{position:relative;margin-bottom:26px;opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
+.tlItem.vis{opacity:1;transform:none}
+.tlItem .dot{position:absolute;left:-25px;top:10px;width:11px;height:11px;border-radius:50%;
+background:var(--gold);box-shadow:0 0 12px var(--gs)}
+.tlCard{background:var(--glass);border:1px solid var(--line);border-radius:12px;padding:14px 16px;position:relative}
+.tlCard::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+box-shadow:inset 0 1px 0 rgba(255,240,210,.2),inset 0 12px 26px -18px rgba(232,196,124,.25)}
+.tlDate{font-size:12.5px;letter-spacing:.12em;color:var(--gs);text-transform:uppercase}
+.tlCard h3{color:var(--gold);font-size:22px;margin:4px 0}
+.tlCard p{color:var(--dim);font-size:15px}
+
+.wish{background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:24px 20px;
+margin:16px auto;max-width:480px;opacity:0;transform:translateY(44px) rotate(-1.5deg);
+transition:opacity .8s,transform .8s;position:relative}
+.wish::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+box-shadow:inset 0 1px 0 rgba(255,240,210,.22),inset 0 14px 30px -20px rgba(232,196,124,.28)}
+.wish.vis{opacity:1;transform:none}
+.wish .ic{font-size:30px}
+.wish h3{color:var(--gold);font-size:26px;margin:8px 0 6px}
+.wish p{color:var(--dim);font-size:16.5px}
+footer{padding:40px 20px 110px;text-align:center;color:var(--dim);font-style:italic}
+footer .fdiv{letter-spacing:10px;margin-top:14px;color:var(--gs)}
+details{max-width:680px;margin:0 auto 60px;padding:0 22px;color:var(--dim);font-size:15px;text-align:left}
+details summary{cursor:pointer;color:var(--gold);margin-bottom:10px}
+details ol{margin-left:20px;line-height:1.8}
+
+/* кнопки */
+.fab{position:fixed;z-index:30;cursor:pointer;color:var(--ink);font-family:'Marck Script',cursive;
+font-size:17px;background:rgba(18,14,38,.62);backdrop-filter:blur(8px);
+border:1px solid var(--line);border-radius:40px;padding:11px 18px;
+box-shadow:0 6px 22px rgba(0,0,0,.4);transition:box-shadow .3s,transform .2s}
+.fab:hover{box-shadow:0 6px 30px rgba(232,196,124,.35)}
+.fab:active{transform:scale(.95)}
+#fabMarket{left:18px;bottom:18px;animation:fabFloat 4s ease-in-out infinite}
+#fabCart{right:18px;bottom:18px}
+#fabCart.bump{animation:bump .45s ease}
+#fabMusic{right:18px;top:16px;padding:10px 14px;font-size:19px}
+@keyframes fabFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes bump{0%{transform:scale(1)}35%{transform:scale(1.22)}70%{transform:scale(.94)}100%{transform:scale(1)}}
+#cartCount{position:absolute;top:-9px;right:-9px;min-width:22px;height:22px;border-radius:12px;
+background:var(--gold);color:#22160a;font-size:13px;font-weight:600;
+display:flex;align-items:center;justify-content:center;padding:0 5px;
+box-shadow:0 0 10px rgba(232,196,124,.6);font-family:'Cormorant Garamond',serif}
+#secretBtn{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:30;
+background:transparent;border:none;color:rgba(232,196,124,.4);font-size:18px;cursor:pointer;opacity:.55}
+#secretBtn:hover{opacity:1}
+
+/* модальные окна */
+.modal{position:fixed;inset:0;z-index:40;background:rgba(8,6,20,.72);backdrop-filter:blur(5px);
+display:none;align-items:center;justify-content:center;padding:18px}
+.modal.open{display:flex}
+.sheet{background:linear-gradient(160deg,#191340,#2a1030);border:1px solid var(--line);
+border-radius:20px;max-width:520px;width:100%;max-height:82vh;overflow:auto;
+padding:26px 22px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.6)}
+.sheet h3{color:var(--gold);font-size:28px;margin-bottom:14px}
+.items{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:14px 0}
+.item{background:rgba(255,255,255,.05);border:1px solid rgba(232,196,124,.25);border-radius:12px;padding:14px 8px}
+.item .ic{font-size:28px}
+.item .icimg{width:64px;height:64px;object-fit:cover;border-radius:12px;
+border:1px solid rgba(232,196,124,.45);box-shadow:0 4px 14px rgba(0,0,0,.35);
+display:block;margin:0 auto}
+.item p{font-size:14px;color:var(--dim);margin:8px 0 10px}
+.addBtn{font-family:'Marck Script',cursive;font-size:16px;color:var(--gold);cursor:pointer;
+background:transparent;border:1px solid var(--gs);border-radius:20px;padding:5px 14px}
+.addBtn:active{transform:scale(.94)}
+.closeBtn{margin-top:8px;font-family:'Marck Script',cursive;font-size:17px;color:var(--ink);cursor:pointer;
+background:transparent;border:1px solid var(--gs);border-radius:24px;padding:8px 22px}
+#cartList{list-style:none;margin:12px 0;line-height:2;color:var(--dim);font-size:17px}
+#cartList li{border-bottom:1px dashed rgba(232,196,124,.2)}
+#secretText{color:var(--dim);font-size:17px;line-height:1.7;font-style:italic}
+</style>
+</head>
+<body>
+
+<div id="silk"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div id="photoBg"></div>
+<div class="vignette"></div>
+<div id="snow"></div>
+<canvas id="fx"></canvas>
+<div class="garland" id="garland"></div>
+
+<div id="gate">
+  <div class="giftbox" id="giftbox">
+    <div class="gb-beam"></div>
+    <div class="gb-lid"><span class="gb-bow">🎀</span></div>
+    <div class="gb-body"></div>
+  </div>
+  <h1>Для самой любимой</h1>
+  <p>Здесь спрятан маленький новогодний подарок. Осталось его открыть…</p>
+  <button id="openGiftBtn">Открыть подарочек ✨</button>
+  <div class="hint">нажми на кнопочку 🎀</div>
+</div>
+
+<div id="content">
+  <section class="header">
+    <div class="orn"><i></i>❦<i></i></div>
+    <h1 class="shimmer" style="font-size:clamp(38px,8vw,64px)">С Наступающим, Любимая!</h1>
+    <p class="sub">этот сайт — маленькая вселенная только для тебя</p>
+  </section>
+
+  <section class="timer">
+    <h2 class="shimmer">До нашего Нового года</h2>
+    <div class="cells">
+      <div class="cell"><b id="d">0</b><span>дней</span></div>
+      <div class="cell"><b id="h">0</b><span>часов</span></div>
+      <div class="cell"><b id="m">0</b><span>минут</span></div>
+      <div class="cell sec"><b id="s">0</b><span>секунд</span></div>
+    </div>
+    <p id="timerNote">Совсем скоро, моя звёздочка ✨</p>
+  </section>
+
+  <section>
+    <h2 class="shimmer">Письмо для тебя</h2>
+    <div class="letter"><span id="letterText"></span><span class="caret" id="caret"></span>
+      <div class="sign" id="sign" style="display:none">— твой Котейка🤍</div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="shimmer">Три вещи, которые я люблю в тебе</h2>
+    <div class="cards">
+      <div class="qcard"><div class="ic">💫</div><h3>Твой смех</h3><p>он делает любой день тёплым</p></div>
+      <div class="qcard"><div class="ic">🤍</div><h3>Твоё сердце</h3><p>самое доброе на свете</p></div>
+      <div class="qcard"><div class="ic">🌙</div><h3>Твои объятия</h3><p>моё любимое место во вселенной</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="shimmer">Наша история</h2>
+    <div class="tl">
+      <div class="tlItem"><span class="dot"></span><div class="tlCard"><div class="tlDate">день, когда всё началось</div><h3>Твой смех</h3><p>Самый искренний подарок, который я бережно храню в своём сердце
+</p></div></div>
+      <div class="tlItem"><span class="dot"></span><div class="tlCard"><div class="tlDate">Первое свидание</div><h3>Первое свидание</h3><p>не сложилось, но мы всё равно смеялись</p></div></div>
+      <div class="tlItem"><span class="dot"></span><div class="tlCard"><div class="tlDate">наша первая зима</div><h3>Первый Новый год вдвоём</h3><p>и понимание, что так будет всегда</p></div></div>
+      <div class="tlItem"><span class="dot"></span><div class="tlCard"><div class="tlDate">дальше — только мы</div><h3>История любви</h3><p>В ней важны не только идеальные моменты, но и те, что научили нас быть ближе</p></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="shimmer">Мои пожелания тебе</h2>
+    <div class="wish"><img class="icimg" style="width:64px;height:64px;object-fit:cover;border-radius:12px;border:1px solid rgba(232,196,124,.45);box-shadow:0 4px 14px rgba(0,0,0,.35);display:block;margin:0 auto 6px" src="photos/wish1.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src='photos/wish1.png'}else{this.outerHTML='<div class=&quot;ic&quot;>✨</div>'}"><h3>Сиять</h3><p>ярче всех звёзд на этом небе, потому что ты умеешь</p></div>
+    <div class="wish"><img class="icimg" style="width:64px;height:64px;object-fit:cover;border-radius:12px;border:1px solid rgba(232,196,124,.45);box-shadow:0 4px 14px rgba(0,0,0,.35);display:block;margin:0 auto 6px" src="photos/wish2.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src='photos/wish2.png'}else{this.outerHTML='<div class=&quot;ic&quot;>🧸</div>'}"><h3>Нежность</h3><p>пусть тебя всегда окружают мягкость и забота</p></div>
+    <div class="wish"><img class="icimg" style="width:64px;height:64px;object-fit:cover;border-radius:12px;border:1px solid rgba(232,196,124,.45);box-shadow:0 4px 14px rgba(0,0,0,.35);display:block;margin:0 auto 6px" src="photos/wish3.jpg" alt="" onerror="if(!this.dataset.t){this.dataset.t=1;this.src='photos/wish3.png'}else{this.outerHTML='<div class=&quot;ic&quot;>🥂</div>'}"><h3>Наша история</h3><p>и пусть мы встретим ещё много-много таких ночей вместе</p></div>
+  </section>
+
+  <footer>
+    <div>С Новым годом, моё сердце 💛</div>
+    <div class="orn"><i></i>❦<i></i></div>
+  </footer>
+
+</div>
+
+<button class="fab" id="fabMarket">🎁 Мини-маркет</button>
+<button class="fab" id="fabCart">🛒 Корзиночка<span id="cartCount">0</span></button>
+<button class="fab" id="fabMusic">🎵</button>
+<button id="secretBtn" title="✦">✦</button>
+
+<div class="modal" id="marketModal">
+  <div class="sheet">
+    <h3>🎁 Мини-маркет</h3>
+    <div class="items" id="marketItems"></div>
+    <button class="closeBtn" data-close="marketModal">Закрыть 🎀</button>
+  </div>
+</div>
+
+<div class="modal" id="cartModal">
+  <div class="sheet">
+    <h3>🎀 Твои подарки в корзинке 🎀</h3>
+    <ul id="cartList"></ul>
+    <button class="closeBtn" id="shareBtn">Поделиться выбором ✨</button>
+    <button class="closeBtn" data-close="cartModal">Закрыть</button>
+  </div>
+</div>
+
+<div class="modal" id="secretModal">
+  <div class="sheet">
+    <h3>✦ Только для тебя ✦</h3>
+    <p id="secretText">Я выбираю тебя. Каждый день, заново 💍</p>
+    <button class="closeBtn" data-close="secretModal">Спрятать обратно 🤍</button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var ITEMS=[
+ {ic:"✨",imgBase:"gift1",name:"Энергетик"},
+ {ic:"🧸",imgBase:"gift2",name:"Шеколадочка"},
+ {ic:"☕",imgBase:"gift3",name:"сыр касичка"},
+ {ic:"💝",imgBase:"gift4",name:"жувачка"},
+ {ic:"❄️",imgBase:"gift5",name:"конфетки"},
+ {ic:"💌",imgBase:"gift6",name:"морожоное"}
+];
+var CAPTIONS=["наш первый снег","ты и я","зимняя сказка","моё счастье","лучший вечер","с тобой тепло","наш праздник","обнимашки"];
+var EXT=["jpg","jpeg","png","webp","JPG","PNG"];
+
+function loadFlex(base,ok,fail){
+ var k=0;
+ (function t(){
+  if(k>=EXT.length){if(fail)fail();return;}
+  var im=new Image();
+  im.onload=function(){ok("photos/"+base+"."+EXT[k]);};
+  im.onerror=function(){k++;t();};
+  im.src="photos/"+base+"."+EXT[k];
+ })();
+}
+
+/* ---------- снег ---------- */
+var snow=document.getElementById("snow"),i,s;
+for(i=0;i<50;i++){s=document.createElement("i");var sz=2+Math.random()*4;
+s.style.width=s.style.height=sz+"px";s.style.left=Math.random()*100+"%";
+s.style.animationDuration=(6+Math.random()*10)+"s";
+s.style.animationDelay=(-Math.random()*10)+"s";s.style.opacity=.3+Math.random()*.5;
+snow.appendChild(s);}
+
+/* ---------- гирлянда ---------- */
+var gar=document.getElementById("garland");
+for(i=0;i<14;i++){var d=document.createElement("span");
+d.style.animationDelay=(Math.random()*2.4)+"s";gar.appendChild(d);}
+
+/* ---------- падающие фото ---------- */
+var photoBg=document.getElementById("photoBg");
+var N=window.innerWidth<760?3:4;
+function makePhoto(idx){
+ var wrap=document.createElement("div");wrap.className="fallWrap";
+ var card=document.createElement("figure");card.className="polaroid";
+ var fb=document.createElement("div");fb.className="fb";
+ fb.innerHTML="📷<small>моё фото "+(idx+1)+"</small>";card.appendChild(fb);
+ var cap=document.createElement("figcaption");cap.textContent=CAPTIONS[idx%CAPTIONS.length];
+ card.appendChild(cap);wrap.appendChild(card);
+ wrap.style.left=(5+Math.random()*85)+"%";
+ wrap.style.animationDuration=(42+Math.random()*48)+"s";
+ wrap.style.animationDelay=(-Math.random()*90)+"s";
+ card.style.animationDelay=(-Math.random()*7)+"s";
+ photoBg.appendChild(wrap);
+ setTimeout(function(){card.classList.add("lit");},200+idx*350);
+ loadFlex("photo"+(idx+1),function(src){
+  var img=document.createElement("img");img.src=src;img.alt="";
+  if(fb.parentNode===card)card.replaceChild(img,fb);
+ });
+}
+for(i=0;i<N;i++)makePhoto(i);
+
+/* ---------- плёночное зерно ---------- */
+(function grain(){
+ var g=document.createElement("canvas");g.width=g.height=120;
+ var gx=g.getContext("2d"),im=gx.createImageData(120,120);
+ for(var j=0;j<im.data.length;j+=4){var v=Math.floor(Math.random()*255);
+  im.data[j]=im.data[j+1]=im.data[j+2]=v;im.data[j+3]=255;}
+ gx.putImageData(im,0,0);
+ var el=document.createElement("div");el.id="grain";
+ el.style.backgroundImage="url("+g.toDataURL()+")";
+ document.body.appendChild(el);
+})();
+
+/* ---------- canvas-эффекты ---------- */
+var cv=document.getElementById("fx"),ctx=cv.getContext("2d"),parts=[];
+function fit(){cv.width=innerWidth;cv.height=innerHeight;}
+fit();addEventListener("resize",fit);
+var HEARTS=["💖","✨","💗","💛"],STARS=["✦","✧","✴︎"];
+function burst(x,y,count,chars,spread,power){
+ for(var j=0;j<count;j++){
+  var a=Math.random()*Math.PI*2,v=(power||3)*(0.4+Math.random()*0.8);
+  parts.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-spread,g:0.06,
+  life:1,decay:0.012+Math.random()*0.012,ch:chars[Math.floor(Math.random()*chars.length)],
+  size:12+Math.random()*16});
+ }
+}
+function firework(){
+ var x=cv.width*(0.2+Math.random()*0.6),y=cv.height*(0.15+Math.random()*0.4);
+ var gold=Math.random()<0.5;
+ for(var j=0;j<46;j++){var a=Math.PI*2*j/46,v=2.4+Math.random()*2.6;
+  parts.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,g:0.045,life:1,
+  decay:0.016,ch:gold?"✦":"✧",size:12+Math.random()*10});}
+}
+function loop(){
+ ctx.clearRect(0,0,cv.width,cv.height);
+ ctx.textAlign="center";ctx.textBaseline="middle";
+ for(var j=parts.length-1;j>=0;j--){var p=parts[j];
+  p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.vx*=0.985;p.vy*=0.985;p.life-=p.decay;
+  if(p.life<=0){parts.splice(j,1);continue;}
+  ctx.globalAlpha=Math.max(p.life,0);
+  ctx.fillStyle="#e8c47c";ctx.font=p.size+"px serif";
+  ctx.fillText(p.ch,p.x,p.y);}
+ ctx.globalAlpha=1;
+ requestAnimationFrame(loop);
+}
+loop();
+
+/* звёздная пыль за курсором */
+var lastDust=0;
+addEventListener("pointermove",function(e){
+ var now=Date.now();if(now-lastDust<40)return;lastDust=now;
+ parts.push({x:e.clientX,y:e.clientY,vx:(Math.random()-.5)*0.6,vy:(Math.random()-.5)*0.6-0.3,
+ g:0.02,life:0.8,decay:0.03,ch:STARS[Math.floor(Math.random()*3)],size:8+Math.random()*8});
+},{passive:true});
+
+/* мини-салют по клику */
+addEventListener("click",function(e){
+ burst(e.clientX,e.clientY,10,STARS,0.6,2);
+});
+
+/* ---------- открытие подарка ---------- */
+var gate=document.getElementById("gate"),content=document.getElementById("content");
+var giftbox=document.getElementById("giftbox");
+var heartsDone=false;
+document.getElementById("openGiftBtn").addEventListener("click",function(e){
+ giftbox.classList.add("open");
+ gate.classList.add("open");content.classList.add("shown");
+ var r=this.getBoundingClientRect();
+ burst(r.left+r.width/2,r.top,26,HEARTS,2.2,4);
+ var k=0;var iv=setInterval(function(){firework();if(++k>=5)clearInterval(iv);},450);
+ if(!heartsDone){heartsDone=true;startLetter();startWishes();}
+ music.play();
+});
+
+/* ---------- печатающееся письмо ---------- */
+var LETTER="Милая, скоро Новый год — и я хочу, чтобы ты знала: самый лучший подарок этого года у меня уже есть. Это ты. Пусть в новом году у тебя сбывается всё, о чём ты тихонько загадываешь под бой курантов. А я всегда буду рядом — держать твою руку, вытирать твои слёзы и превращать обычные дни в маленький праздник. С Наступающим, моя звёздочка ✨";
+function startLetter(){
+ var el=document.getElementById("letterText"),k=0;
+ var iv=setInterval(function(){
+  el.textContent=LETTER.slice(0,++k);
+  if(k>=LETTER.length){clearInterval(iv);document.getElementById("sign").style.display="block";}
+ },28);
+}
+
+/* ---------- появление пожеланий и таймлайна ---------- */
+function startWishes(){
+ var obs=new IntersectionObserver(function(es){
+  es.forEach(function(en){if(en.isIntersecting)en.target.classList.add("vis");});
+ },{threshold:0.2});
+ document.querySelectorAll(".wish,.tlItem").forEach(function(w){obs.observe(w);});
+}
+
+/* ---------- таймер ---------- */
+var note=document.getElementById("timerNote");
+function tick(){
+ var now=new Date(),ny=new Date(now.getFullYear()+1,0,1);
+ var diff=ny-now,d,h,m,sec;
+ d=Math.floor(diff/86400000);h=Math.floor(diff%86400000/3600000);
+ m=Math.floor(diff%3600000/60000);sec=Math.floor(diff%60000/1000);
+ document.getElementById("d").textContent=d;
+ document.getElementById("h").textContent=h;
+ document.getElementById("m").textContent=m;
+ document.getElementById("s").textContent=sec;
+ if(d===0&&h===0&&m<5){note.textContent="Почти полночь… загадывай желание 💫";}
+ else if(d===0){note.textContent="Остались считанные часы ✨";}
+}
+tick();setInterval(tick,1000);
+
+/* ---------- маркет и корзинка ---------- */
+var cart=[];try{cart=JSON.parse(localStorage.getItem("giftCart")||"[]");}catch(e){cart=[];}
+var cParam=new URLSearchParams(location.search).get("gift");
+if(cParam){try{cart=JSON.parse(decodeURIComponent(cParam));}catch(e){}}
+function saveCart(){try{localStorage.setItem("giftCart",JSON.stringify(cart));}catch(e){}}
+function renderCart(){
+ var c=document.getElementById("cartCount");c.textContent=cart.length;
+ c.style.display=cart.length?"flex":"none";
+ var ul=document.getElementById("cartList");ul.innerHTML="";
+ if(!cart.length){ul.innerHTML='<li>Пока пусто… но это легко исправить 🎁</li>';return;}
+ cart.forEach(function(name){var li=document.createElement("li");li.textContent="💝 "+name;ul.appendChild(li);});
+}
+function renderMarket(){
+ var box=document.getElementById("marketItems");
+ box.innerHTML="";
+ ITEMS.forEach(function(it){
+  var div=document.createElement("div");div.className="item";
+  if(it.imgBase){
+   var im=document.createElement("img");im.className="icimg";im.alt="";
+   loadFlex(it.imgBase,function(src){im.src=src;},function(){
+    var d2=document.createElement("div");d2.className="ic";d2.textContent=it.ic;
+    div.replaceChild(d2,im);
+   });
+   div.appendChild(im);
+  }else{
+   var ic=document.createElement("div");ic.className="ic";ic.textContent=it.ic;
+   div.appendChild(ic);
+  }
+  var p=document.createElement("p");p.textContent=it.name;div.appendChild(p);
+  var b=document.createElement("button");b.className="addBtn";b.textContent="+ в корзинку";
+  b.addEventListener("click",function(){
+   cart.push(it.name);saveCart();renderCart();
+   var fc=document.getElementById("fabCart");
+   fc.classList.remove("bump");void fc.offsetWidth;fc.classList.add("bump");
+   var r=fc.getBoundingClientRect();
+   burst(r.left+r.width/2,r.top,8,["💗","✨"],1,2.4);
+  });
+  div.appendChild(b);box.appendChild(div);
+ });
+}
+renderMarket();renderCart();
+function openModal(id){document.getElementById(id).classList.add("open");}
+document.querySelectorAll("[data-close]").forEach(function(b){
+ b.addEventListener("click",function(){document.getElementById(b.getAttribute("data-close")).classList.remove("open");});
+});
+document.getElementById("fabMarket").addEventListener("click",function(){openModal("marketModal");});
+document.getElementById("fabCart").addEventListener("click",function(){openModal("cartModal");});
+document.querySelectorAll(".modal").forEach(function(md){
+ md.addEventListener("click",function(e){if(e.target===md)md.classList.remove("open");});
+});
+document.getElementById("shareBtn").addEventListener("click",function(){
+ var url=location.href.split("?")[0]+"?gift="+encodeURIComponent(JSON.stringify(cart));
+ if(navigator.share){navigator.share({title:"Мои подарочки 🎀",url:url}).catch(function(){});}
+ else{try{prompt("Скопируй и отправь мне 💌",url);}catch(e){}}
+});
+
+/* ---------- секретная зона ---------- */
+var sClicks=0,sTimer;
+document.getElementById("secretBtn").addEventListener("click",function(){
+ var r=this.getBoundingClientRect();
+ burst(r.left+r.width/2,r.top,6,["✦","✧"],1,2);
+ sClicks++;
+ clearTimeout(sTimer);sTimer=setTimeout(function(){sClicks=0;},1800);
+ if(sClicks>=3){sClicks=0;
+  burst(innerWidth/2,innerHeight/2,20,["💖","✨",""],1.6,3);
+  openModal("secretModal");}
+});
+
+/* ---------- музыка ---------- */
+var music={audio:null,on:false,
+ play:function(){
+  var a=this.audio||(this.audio=new Audio("music.mp3"));
+  a.loop=true;a.play().then(function(){music.on=true;})
+  .catch(function(){document.getElementById("fabMusic").style.display="none";});
+ }};
+document.getElementById("fabMusic").addEventListener("click",function(){
+ if(!music.audio){music.audio=new Audio("music.mp3");music.audio.loop=true;}
+ if(music.on){music.audio.pause();music.on=false;this.textContent="🔇";}
+ else{music.audio.play();music.on=true;this.textContent="🎵";}
+});
+})();
+</script>
+</body>
+</html>
